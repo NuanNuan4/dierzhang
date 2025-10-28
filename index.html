@@ -3,603 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第2章 交互式数据可视化</title>
+    <title>第三章数据可视化交互网页</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            color: #333;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .chart-selector {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .chart-selector select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: white;
-        }
-        
-        .chart-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .chart-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #333;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-        
-        .chart-controls {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .control-group {
-            margin-bottom: 15px;
-        }
-        
-        .control-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .control-group input[type="range"] {
-            width: 100%;
-        }
-        
-        .control-group select, .control-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        .chart-description {
-            background: #e8f4fd;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 4px;
-        }
-        
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .chart-container {
-                padding: 15px;
-            }
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.4.4/d3.min.js"></script>
 </head>
 <body>
-    <div class="header">
-        <h1>📊 第2章数据可视化</h1>
-        <p>交互式图表展示 - 直接体验数据可视化</p>
-    </div>
-    
     <div class="container">
-        <div class="chart-selector">
-            <label for="chartType"><strong>选择图表类型:</strong></label>
-            <select id="chartType" onchange="loadChart(this.value)">
-                <option value="temperature">🌡️ 折线图 - 气温变化</option>
-                <option value="gmv">💰 柱形图 - 阿里巴巴GMV</option>
-                <option value="shopping">🛒 条形图 - 网购替代率</option>
-                <option value="logistics">🚚 堆积面积图 - 物流费用</option>
-                <option value="alipay">💳 饼图 - 支付宝账单</option>
-                <option value="car">🚗 散点图 - 车速制动距离</option>
-                <option value="power">⚡ 箱形图 - 发电量统计</option>
-                <option value="radar">🎯 雷达图 - 职业兴趣测试</option>
-                <option value="errorbar">🌱 误差棒图 - 细根生物量</option>
-            </select>
-        </div>
-        
-        <div class="chart-container">
-            <div class="chart-title" id="currentChartTitle">🌡️ 未来15天最高气温和最低气温</div>
-            
-            <div class="chart-controls" id="chartControls">
-                <!-- 动态加载控件 -->
-            </div>
-            
-            <div id="chart" style="width: 100%; height: 500px;"></div>
-            
-            <div class="chart-description" id="chartDescription">
-                <strong>图表说明:</strong> 此图表展示未来15天的气温变化趋势，包含最高气温和最低气温数据。
-                使用鼠标悬停查看详细数据，拖拽缩放图表区域。
-            </div>
-        </div>
+        <header class="header">
+            <h1>第三章数据可视化交互网页</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-target="home">首页</button>
+                <button class="nav-btn" data-target="sin-cos">三角函数</button>
+                <button class="nav-btn" data-target="box-office">票房数据</button>
+                <button class="nav-btn" data-target="math-functions">数学函数</button>
+                <button class="nav-btn" data-target="statistical">统计分析</button>
+                <button class="nav-btn" data-target="financial">金融数据</button>
+                <button class="nav-btn" data-target="3d-visualization">3D可视化</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <!-- 首页 -->
+            <section id="home" class="content-section active">
+                <h2>欢迎来到数据可视化交互平台</h2>
+                <div class="card-container">
+                    <div class="card" data-target="sin-cos">
+                        <h3>三角函数可视化</h3>
+                        <p>探索正弦、余弦、正切等三角函数性质</p>
+                    </div>
+                    <div class="card" data-target="box-office">
+                        <h3>2019年内地电影票房排行</h3>
+                        <p>分析电影票房数据和市场表现</p>
+                    </div>
+                    <div class="card" data-target="math-functions">
+                        <h3>数学函数分析</h3>
+                        <p>多项式、指数、对数等函数可视化</p>
+                    </div>
+                    <div class="card" data-target="statistical">
+                        <h3>统计分析图表</h3>
+                        <p>散点图、箱线图、热力图等统计图表</p>
+                    </div>
+                    <div class="card" data-target="financial">
+                        <h3>金融数据可视化</h3>
+                        <p>股票走势、K线图、技术指标分析</p>
+                    </div>
+                    <div class="card" data-target="3d-visualization">
+                        <h3>3D数据可视化</h3>
+                        <p>三维空间中的函数和曲面展示</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 正弦/余弦函数页面 -->
+            <section id="sin-cos" class="content-section">
+                <h2>正弦/余弦函数可视化</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="amplitude">振幅:</label>
+                        <input type="range" id="amplitude" min="0.1" max="2" step="0.1" value="1">
+                        <span id="amplitude-value">1</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="frequency">频率:</label>
+                        <input type="range" id="frequency" min="0.5" max="3" step="0.1" value="1">
+                        <span id="frequency-value">1</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="phase">相位:</label>
+                        <input type="range" id="phase" min="0" max="6.28" step="0.1" value="0">
+                        <span id="phase-value">0</span>
+                    </div>
+                </div>
+                <div id="sin-cos-chart"></div>
+            </section>
+
+            <!-- 票房数据页面 -->
+            <section id="box-office" class="content-section">
+                <h2>2019年内地电影票房排行榜</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="sort-order">排序方式:</label>
+                        <select id="sort-order">
+                            <option value="desc">票房降序</option>
+                            <option value="asc">票房升序</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="min-revenue">最低票房(亿元):</label>
+                        <input type="range" id="min-revenue" min="0" max="50" step="1" value="0">
+                        <span id="min-revenue-value">0</span>
+                    </div>
+                </div>
+                <div id="box-office-chart"></div>
+            </section>
+
+            <!-- 数学函数页面 -->
+            <section id="math-functions" class="content-section">
+                <h2>数学函数可视化分析</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="function-type">函数类型:</label>
+                        <select id="function-type">
+                            <option value="polynomial">多项式函数</option>
+                            <option value="exponential">指数函数</option>
+                            <option value="logarithmic">对数函数</option>
+                            <option value="rational">有理函数</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="coefficient">系数调整:</label>
+                        <input type="range" id="coefficient" min="-5" max="5" step="0.1" value="1">
+                        <span id="coefficient-value">1</span>
+                    </div>
+                </div>
+                <div id="math-functions-chart"></div>
+            </section>
+
+            <!-- 统计分析页面 -->
+            <section id="statistical" class="content-section">
+                <h2>统计分析图表</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="chart-type">图表类型:</label>
+                        <select id="chart-type">
+                            <option value="scatter">散点图</option>
+                            <option value="box">箱线图</option>
+                            <option value="heatmap">热力图</option>
+                            <option value="histogram">直方图</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="data-size">数据规模:</label>
+                        <input type="range" id="data-size" min="10" max="1000" step="10" value="100">
+                        <span id="data-size-value">100</span>
+                    </div>
+                </div>
+                <div id="statistical-chart"></div>
+            </section>
+
+            <!-- 金融数据页面 -->
+            <section id="financial" class="content-section">
+                <h2>金融数据可视化</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="stock-type">股票类型:</label>
+                        <select id="stock-type">
+                            <option value="tech">科技股</option>
+                            <option value="finance">金融股</option>
+                            <option value="energy">能源股</option>
+                            <option value="consumer">消费股</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="time-period">时间周期:</label>
+                        <select id="time-period">
+                            <option value="1d">1天</option>
+                            <option value="1w">1周</option>
+                            <option value="1m">1月</option>
+                            <option value="1y">1年</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="financial-chart"></div>
+            </section>
+
+            <!-- 3D可视化页面 -->
+            <section id="3d-visualization" class="content-section">
+                <h2>3D数据可视化</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="3d-function">3D函数:</label>
+                        <select id="3d-function">
+                            <option value="paraboloid">抛物面</option>
+                            <option value="saddle">马鞍面</option>
+                            <option value="sphere">球面</option>
+                            <option value="wave">波形曲面</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="rotation-speed">旋转速度:</label>
+                        <input type="range" id="rotation-speed" min="0" max="10" step="1" value="5">
+                        <span id="rotation-speed-value">5</span>
+                    </div>
+                </div>
+                <div id="3d-chart"></div>
+            </section>
+        </main>
     </div>
 
-    <script>
-        // 图表数据定义
-        const chartData = {
-            temperature: {
-                title: "🌡️ 未来15天最高气温和最低气温",
-                description: "展示未来15天的气温变化趋势，包含最高气温和最低气温数据。",
-                data: {
-                    x: [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
-                    y_max: [32,33,34,34,33,31,30,29,30,29,26,23,21,25,31],
-                    y_min: [19,19,20,22,22,21,22,16,18,18,17,14,15,16,16]
-                },
-                controls: `
-                    <div class="control-group">
-                        <label>显示最高气温:</label>
-                        <input type="checkbox" id="showMax" checked onchange="updateTemperatureChart()">
-                    </div>
-                    <div class="control-group">
-                        <label>显示最低气温:</label>
-                        <input type="checkbox" id="showMin" checked onchange="updateTemperatureChart()">
-                    </div>
-                    <div class="control-group">
-                        <label>线条宽度:</label>
-                        <input type="range" id="lineWidth" min="1" max="5" value="2" onchange="updateTemperatureChart()">
-                    </div>
-                `
-            },
-            gmv: {
-                title: "💰 2013-2019财年阿里巴巴淘宝和天猫平台GMV",
-                description: "展示阿里巴巴GMV的增长趋势，从2013年到2019年的数据变化。",
-                data: {
-                    labels: ["FY2013", "FY2014", "FY2015", "FY2016", "FY2017", "FY2018", "FY2019"],
-                    values: [10770, 16780, 24440, 30920, 37670, 48200, 57270]
-                }
-            },
-            shopping: {
-                title: "🛒 各商品种类的网购替代率",
-                description: "展示不同商品种类的网购替代率比较，数值越高表示网购替代率越高。",
-                data: {
-                    labels: ["家政、家教、保姆等生活服务", "飞机票、火车票", "家具", "手机、手机配件",
-                            "计算机及其配套产品", "汽车用品", "通信充值、游戏充值", "个人护理用品",
-                            "书报杂志及音像制品", "餐饮、旅游、住宿", "家用电器", 
-                            "食品、饮料、烟酒、保健品", "家庭日杂用品", "保险、演出票务",
-                            "服装、鞋帽、家用纺织品", "数码产品", "其他商品和服务", "工艺品、收藏品"],
-                    values: [0.959, 0.951, 0.935, 0.924, 0.893, 0.892, 0.865, 0.863, 0.860, 
-                            0.856, 0.854, 0.835, 0.826, 0.816, 0.798, 0.765, 0.763, 0.67]
-                }
-            },
-            logistics: {
-                title: "🚚 物流公司物流费用统计",
-                description: "展示三家物流公司各月的费用统计，采用堆积面积图形式。",
-                data: {
-                    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                    company_a: [198, 215, 245, 222, 200, 236, 201, 253, 236, 200, 266, 290],
-                    company_b: [203, 236, 200, 236, 269, 216, 298, 333, 301, 349, 360, 368],
-                    company_c: [185, 205, 226, 199, 238, 200, 250, 209, 246, 219, 253, 288]
-                }
-            },
-            alipay: {
-                title: "💳 支付宝月账单报告",
-                description: "展示支付宝月账单的消费分布情况，包含8个消费类别。",
-                data: {
-                    categories: ['购物', '人情往来', '餐饮美食', '通信物流', '生活日用', '交通出行', '休闲娱乐', '其他'],
-                    amounts: [800, 100, 1000, 200, 300, 200, 200, 200],
-                    percentages: [26.7, 3.3, 33.3, 6.7, 10.0, 6.7, 6.7, 6.7]
-                }
-            },
-            car: {
-                title: "🚗 汽车速度与制动距离的关系",
-                description: "展示汽车速度与制动距离的关系，速度越高制动距离越长。",
-                data: {
-                    speed: [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200],
-                    distance: [0.5,2.0,4.4,7.9,12.3,17.7,24.1,31.5,39.9,49.2,59.5,70.8,83.1,96.4,110.7,126.0,142.2,159.4,177.6,196.8]
-                }
-            },
-            power: {
-                title: "⚡ 2017年和2018年全国发电量统计",
-                description: "展示2017年和2018年各月发电量的箱形图统计分析。",
-                data: {
-                    months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                    2018: [5200, 5254.5, 5283.4, 5107.8, 5443.3, 5550.6, 6400.2, 6404.9, 5483.1, 5330.2, 5543, 6199.9],
-                    2017: [4605.2, 4710.3, 5168.9, 4767.2, 4947, 5203, 6047.4, 5945.5, 5219.6, 5038.1, 5196.3, 5698.6]
-                }
-            },
-            radar: {
-                title: "🎯 霍兰德职业兴趣测试",
-                description: "展示6位测试者的职业兴趣测试结果雷达图分析。",
-                data: {
-                    dimensions: ['研究型(I)', '艺术型(A)', '社会型(S)', '企业型(E)', '传统型(C)', '现实型(R)'],
-                    testers: [
-                        [0.40, 0.32, 0.35, 0.30, 0.30, 0.88],
-                        [0.85, 0.35, 0.30, 0.40, 0.40, 0.30],
-                        [0.43, 0.89, 0.30, 0.28, 0.22, 0.30],
-                        [0.30, 0.25, 0.48, 0.85, 0.45, 0.40],
-                        [0.20, 0.38, 0.87, 0.45, 0.32, 0.28],
-                        [0.34, 0.31, 0.38, 0.40, 0.92, 0.28]
-                    ]
-                }
-            },
-            errorbar: {
-                title: "🌱 4个树种不同季节的细根生物量",
-                description: "展示四个树种在不同季节的细根生物量及误差范围。",
-                data: {
-                    seasons: ['春季', '夏季', '秋季'],
-                    species_a: { values: [2.04, 1.57, 1.63], errors: [0.16, 0.08, 0.10] },
-                    species_b: { values: [1.69, 1.61, 1.64], errors: [0.27, 0.14, 0.14] },
-                    species_c: { values: [4.65, 4.99, 4.94], errors: [0.34, 0.32, 0.29] },
-                    species_d: { values: [3.39, 2.33, 4.10], errors: [0.23, 0.23, 0.39] }
-                }
-            }
-        };
-
-        // 初始化加载第一个图表
-        window.addEventListener('load', function() {
-            loadChart('temperature');
-        });
-
-        function loadChart(chartType) {
-            const chart = chartData[chartType];
-            if (!chart) return;
-            
-            document.getElementById('currentChartTitle').textContent = chart.title;
-            document.getElementById('chartDescription').innerHTML = 
-                `<strong>图表说明:</strong> ${chart.description}`;
-            
-            document.getElementById('chartControls').innerHTML = chart.controls || '';
-            
-            // 根据图表类型渲染图表
-            switch(chartType) {
-                case 'temperature':
-                    renderTemperatureChart();
-                    break;
-                case 'gmv':
-                    renderGMVChart();
-                    break;
-                case 'shopping':
-                    renderShoppingChart();
-                    break;
-                case 'logistics':
-                    renderLogisticsChart();
-                    break;
-                case 'alipay':
-                    renderAlipayChart();
-                    break;
-                case 'car':
-                    renderCarChart();
-                    break;
-                case 'power':
-                    renderPowerChart();
-                    break;
-                case 'radar':
-                    renderRadarChart();
-                    break;
-                case 'errorbar':
-                    renderErrorbarChart();
-                    break;
-            }
-        }
-
-        function renderTemperatureChart() {
-            const data = chartData.temperature.data;
-            const traces = [];
-            
-            if (document.getElementById('showMax').checked) {
-                traces.push({
-                    x: data.x,
-                    y: data.y_max,
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    name: '最高气温',
-                    line: { width: document.getElementById('lineWidth').value, color: 'red' },
-                    marker: { size: 6, color: 'red' }
-                });
-            }
-            
-            if (document.getElementById('showMin').checked) {
-                traces.push({
-                    x: data.x,
-                    y: data.y_min,
-                    type: 'scatter',
-                    mode: 'lines+markers',
-                    name: '最低气温',
-                    line: { width: document.getElementById('lineWidth').value, color: 'blue' },
-                    marker: { size: 6, color: 'blue' }
-                });
-            }
-            
-            const layout = {
-                title: '未来15天气温变化趋势',
-                xaxis: { title: '天数' },
-                yaxis: { title: '温度 (°C)' },
-                hovermode: 'closest',
-                showlegend: true
-            };
-            
-            Plotly.newPlot('chart', traces, layout, { responsive: true });
-        }
-
-        function renderGMVChart() {
-            const data = chartData.gmv.data;
-            
-            const trace = {
-                x: data.labels,
-                y: data.values,
-                type: 'bar',
-                marker: { color: '#667eea' },
-                text: data.values.map(v => (v/1000).toFixed(1) + '千亿'),
-                textposition: 'auto'
-            };
-            
-            const layout = {
-                title: '阿里巴巴GMV增长趋势',
-                xaxis: { title: '财年' },
-                yaxis: { title: 'GMV (亿元)' },
-                showlegend: false
-            };
-            
-            Plotly.newPlot('chart', [trace], layout, { responsive: true });
-        }
-
-        function updateTemperatureChart() {
-            renderTemperatureChart();
-        }
-
-        function renderShoppingChart() {
-            const data = chartData.shopping.data;
-            
-            // 创建水平条形图
-            const trace = {
-                y: data.labels,
-                x: data.values,
-                type: 'bar',
-                orientation: 'h',
-                marker: { color: '#667eea' },
-                text: data.values.map(v => (v * 100).toFixed(1) + '%'),
-                textposition: 'auto'
-            };
-            
-            const layout = {
-                title: '各商品种类网购替代率',
-                xaxis: { title: '替代率', range: [0.6, 1.0] },
-                yaxis: { title: '商品种类', automargin: true },
-                height: 600,
-                margin: { l: 200 }
-            };
-            
-            Plotly.newPlot('chart', [trace], layout, { responsive: true });
-        }
-
-        function renderLogisticsChart() {
-            const data = chartData.logistics.data;
-            
-            const trace1 = {
-                x: data.months,
-                y: data.company_a,
-                name: '公司A',
-                stackgroup: 'one',
-                line: { color: '#ff6b6b' },
-                fillcolor: 'rgba(255, 107, 107, 0.6)'
-            };
-            
-            const trace2 = {
-                x: data.months,
-                y: data.company_b,
-                name: '公司B',
-                stackgroup: 'one',
-                line: { color: '#4ecdc4' },
-                fillcolor: 'rgba(78, 205, 196, 0.6)'
-            };
-            
-            const trace3 = {
-                x: data.months,
-                y: data.company_c,
-                name: '公司C',
-                stackgroup: 'one',
-                line: { color: '#45b7d1' },
-                fillcolor: 'rgba(69, 183, 209, 0.6)'
-            };
-            
-            const layout = {
-                title: '物流公司月度费用统计',
-                xaxis: { title: '月份' },
-                yaxis: { title: '费用 (万元)' }
-            };
-            
-            Plotly.newPlot('chart', [trace1, trace2, trace3], layout, { responsive: true });
-        }
-
-        function renderAlipayChart() {
-            const data = chartData.alipay.data;
-            
-            const trace = {
-                labels: data.categories,
-                values: data.amounts,
-                type: 'pie',
-                hole: 0.4,
-                textinfo: 'label+percent',
-                hoverinfo: 'label+percent+value',
-                marker: {
-                    colors: ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd']
-                }
-            };
-            
-            const layout = {
-                title: '支付宝月账单分布',
-                showlegend: true
-            };
-            
-            Plotly.newPlot('chart', [trace], layout, { responsive: true });
-        }
-
-        function renderCarChart() {
-            const data = chartData.car.data;
-            
-            const trace = {
-                x: data.speed,
-                y: data.distance,
-                mode: 'markers',
-                type: 'scatter',
-                marker: {
-                    size: 12,
-                    color: '#667eea',
-                    opacity: 0.8
-                },
-                line: {
-                    color: '#667eea',
-                    width: 2,
-                    dash: 'dash'
-                }
-            };
-            
-            const layout = {
-                title: '汽车速度与制动距离关系',
-                xaxis: { title: '速度 (km/h)' },
-                yaxis: { title: '制动距离 (m)' }
-            };
-            
-            Plotly.newPlot('chart', [trace], layout, { responsive: true });
-        }
-
-        function renderPowerChart() {
-            const data = chartData.power.data;
-            
-            const trace2018 = {
-                y: data[2018],
-                name: '2018年',
-                type: 'box',
-                boxpoints: 'all',
-                jitter: 0.3,
-                pointpos: -1.8,
-                marker: { color: '#ff6b6b' }
-            };
-            
-            const trace2017 = {
-                y: data[2017],
-                name: '2017年',
-                type: 'box',
-                boxpoints: 'all',
-                jitter: 0.3,
-                pointpos: -1.8,
-                marker: { color: '#4ecdc4' }
-            };
-            
-            const layout = {
-                title: '年度发电量统计比较',
-                yaxis: { title: '发电量 (亿千瓦时)' },
-                boxmode: 'group'
-            };
-            
-            Plotly.newPlot('chart', [trace2018, trace2017], layout, { responsive: true });
-        }
-
-        function renderRadarChart() {
-            const data = chartData.radar.data;
-            
-            // 只显示第一位测试者的数据
-            const testerData = data.testers[0];
-            const fullTesterData = [...testerData, testerData[0]]; // 闭合雷达图
-            const fullDimensions = [...data.dimensions, data.dimensions[0]]; // 闭合雷达图
-            
-            const trace = {
-                r: fullTesterData,
-                theta: fullDimensions,
-                fill: 'toself',
-                name: '测试者1',
-                line: { color: '#667eea' },
-                fillcolor: 'rgba(102, 126, 234, 0.3)'
-            };
-            
-            const layout = {
-                title: '职业兴趣测试结果',
-                polar: {
-                    radialaxis: {
-                        visible: true,
-                        range: [0, 1]
-                    }
-                },
-                showlegend: false
-            };
-            
-            Plotly.newPlot('chart', [trace], layout, { responsive: true });
-        }
-
-        function renderErrorbarChart() {
-            const data = chartData.errorbar.data;
-            
-            const traces = [];
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
-            const speciesNames = ['树种A', '树种B', '树种C', '树种D'];
-            const speciesData = [data.species_a, data.species_b, data.species_c, data.species_d];
-            
-            speciesData.forEach((species, index) => {
-                const trace = {
-                    x: data.seasons,
-                    y: species.values,
-                    type: 'bar',
-                    name: speciesNames[index],
-                    marker: { color: colors[index] },
-                    error_y: {
-                        type: 'data',
-                        array: species.errors,
-                        visible: true
-                    }
-                };
-                traces.push(trace);
-            });
-            
-            const layout = {
-                title: '各树种季节细根生物量比较',
-                xaxis: { title: '季节' },
-                yaxis: { title: '细根生物量 (g/m²)' },
-                barmode: 'group'
-            };
-            
-            Plotly.newPlot('chart', traces, layout, { responsive: true });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
